@@ -57,7 +57,7 @@ app.post('/tasks', async (req, res)=>{
     const task = new Task(req.body)
 
     try{
-        let task = await task.save()
+        await task.save()
         res.send(task)
     }catch(e){
         res.status(500).send(e)
@@ -67,7 +67,7 @@ app.post('/tasks', async (req, res)=>{
 app.get('/task', async (req, res)=>{
 
     try{
-        let task = Task.find({});
+        let task = await Task.find({});
         if(task)
             res.status(200).send(task)
             res.status(404).send('Task Not Found')
