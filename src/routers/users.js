@@ -45,4 +45,43 @@ router.get('/user/:id', async (req, res)=>{
 
 })
 
+// update individual user
+
+router.patch('/user/:id', async (req, res)=>{
+    const updates = Object.keys(req.body)
+    const allowOperator = ['name', 'password', 'age', 'email']
+    const isValidOperation = updates.every((update) => allowOperator.includes(update))
+    if(!isValidOperation)
+        return res.status().send({error: 'Invalid Request'})
+    try{
+        console.log(req.params.id)
+       // const task = await Task.findByIdAndUpdate(req.params.id, req.body, { runValidators: true })
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { runValidators: true })
+        console.log(user)
+        if(!user)
+            return res.status(404).send()
+            return res.status(200).send(user)
+
+    }catch (e) {
+        return res.status(500).send(e)
+    }
+
+
+})
+
+
+// delete individual user
+
+router.delete('/user/:id', async (req, res)=>{
+    try{
+        const user = await User.findByIdAndDelete(req.params.id)
+        if(!user)
+            return res.status(404).send()
+            return res.status(200).send(user)
+    }catch (e) {
+        return res.status(500).send(e)
+    }
+
+})
+
 module.exports = router
